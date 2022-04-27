@@ -11,9 +11,10 @@ _$_OrderAndTotal _$$_OrderAndTotalFromJson(Map<String, dynamic> json) =>
       orderDataList: (json['orderDataList'] as List<dynamic>?)
           ?.map((e) => OrderData.fromJson(e as Map<String, dynamic>))
           .toList(),
-      totalOrder: json['totalOrder'] as int,
-      originalTotalRevenue: json['originalTotalRevenue'] as int,
-      totalRevenue: json['totalRevenue'] as int,
+      totalOrder: json['totalOrder'] as int? ?? 0,
+      originalTotalRevenue: json['originalTotalRevenue'] as int? ?? 0,
+      totalRevenue: json['totalRevenue'] as int? ?? 0,
+      expend: json['expend'] as int? ?? 0,
     );
 
 Map<String, dynamic> _$$_OrderAndTotalToJson(_$_OrderAndTotal instance) =>
@@ -22,4 +23,5 @@ Map<String, dynamic> _$$_OrderAndTotalToJson(_$_OrderAndTotal instance) =>
       'totalOrder': instance.totalOrder,
       'originalTotalRevenue': instance.originalTotalRevenue,
       'totalRevenue': instance.totalRevenue,
+      'expend': instance.expend,
     };

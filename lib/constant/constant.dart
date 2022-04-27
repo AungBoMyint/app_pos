@@ -1,6 +1,6 @@
-const orderCollection = "orders";
 const productCollection = "products";
 const couponCollection = "coupons";
+const expendCollection = "expends";
 
 final dailyMapKey = DateTime.now().toString().split(" ").first;
 final thisYearColleciton = "${DateTime.now().year}Collection";

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import '../../../../model/product_item.dart';
 import '../view/pos_view.dart';
@@ -9,10 +10,12 @@ import '../view/pos_view.dart';
 class PosController extends GetxController {
   bool loading = true;
   String categoryNameFilter = "All";
+  String? barcodeResult;
   Map<String, dynamic>? orderDetail;
   List<ProductItem> orderItems = [];
   QuerySnapshot? productList;
   QuerySnapshot? categoryList;
+  String search = "";
 
   @override
   void onInit() {
@@ -42,8 +45,19 @@ class PosController extends GetxController {
     update();
   }
 
+  void startScan() async {
+    categoryNameFilter = "scanning";
+    String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+        "#ff6666", "Cancel", true, ScanMode.BARCODE);
+    barcodeResult = barcodeScanRes;
+    if (barcodeResult == "-1") {
+      categoryNameFilter = "All";
+    }
+    debugPrint("*******barcode: $barcodeResult");
+    update();
+  }
+
   addItemQty(ProductItem addedItem) {
-    
     var searchList = orderItems.where((p) => p.id == addedItem.id).toList();
 
     if (searchList.isEmpty) {

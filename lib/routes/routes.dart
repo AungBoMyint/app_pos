@@ -1,10 +1,13 @@
 import 'package:get/get.dart';
+import 'package:pos_and_ecommerce/model/pos/expend_category.dart';
+import 'package:pos_and_ecommerce/screen/view/expend/view/expend_view.dart';
 
 import '../controller/home_controller.dart';
 import '../screen/blue_tooth_screen.dart';
 import '../screen/home_screen.dart';
 import '../screen/item_upload_screen.dart';
 import '../screen/view/auth/login/view/login_view.dart';
+import '../screen/view/expend_category/expend_category_view.dart';
 import '../screen/view/pos_inventory/inventory_management.dart';
 import '../screen/view/pos_sales_analysis/sales_analysis.dart';
 
@@ -21,6 +24,8 @@ const loginUrl = "/login_url";
 const salesUrl = "/sales_url";
 const inventoryUrl = "/inventory_url";
 const couponUrl = "/coupon_url";
+const expendCategoryUrl = "/expend_category_url";
+const expendUrl = "/expend_url";
 
 List<GetPage> routes = [
   GetPage(
@@ -35,7 +40,6 @@ List<GetPage> routes = [
     name: blueToothScreen,
     page: () => BlueToothPrintScreen(),
   ),
- 
   GetPage(
     name: inventoryUrl,
     page: () => const InventoryManagement(),
@@ -44,10 +48,17 @@ List<GetPage> routes = [
     name: salesUrl,
     page: () => const SalesAnalysis(),
   ),
-  
   GetPage(
     name: loginUrl,
     page: () => const LoginView(),
+  ),
+  GetPage(
+    name: expendCategoryUrl,
+    page: () => const ExpendCategoryView(),
+  ),
+  GetPage(
+    name: expendUrl,
+    page: () => const ExpendView(),
   ),
 ];
 

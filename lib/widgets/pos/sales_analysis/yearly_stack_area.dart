@@ -10,7 +10,6 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../controller/pos/sales_controller.dart';
 import '../../../model/pos/chart_data.dart';
 
-
 class StackedAreaCustomColorLineChart extends StatelessWidget {
   const StackedAreaCustomColorLineChart({Key? key}) : super(key: key);
 
@@ -18,7 +17,7 @@ class StackedAreaCustomColorLineChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return SfCartesianChart(
         title: ChartTitle(
-            text: "ယခု နှစ် ၏ ဝင်ငွေ ၊ အမြတ် နှင့် ရင်းနှီးငွေ ဇယား",
+            text: "ယခု နှစ် ၏ ဝင်ငွေ ၊ အမြတ် နှင့် သုံးစွဲငွေ ဇယား",
             textStyle: const TextStyle(
               color: Color.fromARGB(255, 15, 70, 17),
               fontSize: 14,
@@ -26,25 +25,25 @@ class StackedAreaCustomColorLineChart extends StatelessWidget {
             )),
         primaryXAxis: CategoryAxis(),
         series: <ChartSeries>[
-          StackedAreaSeries<ChartData, String>(
+          SplineAreaSeries<ChartData, String>(
               color: Colors.red,
-              groupName: 'Profit',
+              //groupName: 'Profit',
               dataLabelSettings: const DataLabelSettings(
                   isVisible: true, useSeriesColor: true),
               dataSource: profitChartDataList(),
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y),
-          StackedAreaSeries<ChartData, String>(
+          SplineAreaSeries<ChartData, String>(
               color: Colors.green,
-              groupName: 'Revenue',
+              //groupName: 'Revenue',
               dataLabelSettings: const DataLabelSettings(
                   isVisible: true, useSeriesColor: true),
               dataSource: revenueChartDataList(),
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y),
-          StackedAreaSeries<ChartData, String>(
+          SplineAreaSeries<ChartData, String>(
               color: Colors.blue,
-              groupName: 'Cost',
+              //groupName: 'Cost',
               dataLabelSettings: const DataLabelSettings(
                   isVisible: true, useSeriesColor: true),
               dataSource: costChartDataList(),
@@ -56,8 +55,10 @@ class StackedAreaCustomColorLineChart extends StatelessWidget {
   List<ChartData> profitChartDataList() {
     SalesController _controller = Get.find();
     return _controller.monthlyDataList.value!.map((monthData) {
-      return ChartData(_controller.getMonthName(monthData.dateTimeMonth),
-          monthData.totalRevenue - monthData.originalTotalRevenue);
+      return ChartData(
+          _controller.getMonthName(monthData.dateTimeMonth),
+          (monthData.totalRevenue ?? 0) -
+              (monthData.originalTotalRevenue ?? 0));
     }).toList();
   }
 }
@@ -66,14 +67,19 @@ List<ChartData> revenueChartDataList() {
   SalesController _controller = Get.find();
   return _controller.monthlyDataList.value!.map((monthData) {
     return ChartData(_controller.getMonthName(monthData.dateTimeMonth),
-        monthData.totalRevenue);
+        monthData.totalRevenue ?? 0);
   }).toList();
 }
 
 List<ChartData> costChartDataList() {
   SalesController _controller = Get.find();
-  return _controller.monthlyDataList.value!.map((monthData) {
+  int total = 0;
+  final List<ChartData> chartDataList =
+      _controller.monthlyDataList.value!.map((monthData) {
+    total += monthData.expend ?? 0;
     return ChartData(_controller.getMonthName(monthData.dateTimeMonth),
-        monthData.originalTotalRevenue);
+        monthData.expend ?? 0);
   }).toList();
+  debugPrint("*****YearCost: $total");
+  return chartDataList;
 }

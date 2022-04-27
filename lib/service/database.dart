@@ -2,12 +2,15 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pos_and_ecommerce/model/order_item.dart';
 import 'package:pos_and_ecommerce/model/product_item.dart';
 
 import '../constant/constant.dart';
 import '../data/constant.dart';
 import '../model/pos/coupon.dart';
+import '../model/pos/expend.dart';
 
 class Database {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
@@ -57,6 +60,40 @@ class Database {
           await updateTotalForDaily(item);
           await updateTotalForMonthly(item);
         }
+      });
+    } catch (e) {
+      debugPrint("****************PurchseSubmitError $e*************");
+    }
+  }
+
+  //Write PurchaseData
+  Future<void> writeExpend(Expend expend) async {
+    try {
+      await _firebaseFirestore
+          .collection(expendCollection)
+          .doc(expend.dateTime)
+          .set(expend.toJson())
+          .then((value) async {
+        //UPDATEREMAINQUANTITY
+        await updateExpendForDaily(expend.cost);
+        await updateExpendForMonthly(expend.cost);
+      });
+    } catch (e) {
+      debugPrint("****************PurchseSubmitError $e*************");
+    }
+  }
+
+  //Write PurchaseData
+  Future<void> deleteExpend(Expend expend) async {
+    try {
+      await _firebaseFirestore
+          .collection(expendCollection)
+          .doc(expend.dateTime)
+          .delete()
+          .then((value) async {
+        //UPDATEREMAINQUANTITY
+        await subtractExpendForDaily(expend);
+        await subtractExpendForMonthly(expend);
       });
     } catch (e) {
       debugPrint("****************PurchseSubmitError $e*************");
@@ -220,6 +257,141 @@ class Database {
               "dateTimeMonth": DateTime.now(),
             },
             SetOptions(merge: true));
+      }
+    });
+  }
+
+  //FOR EXPEND ************************ //
+  //Update Expend in today Map
+  Future<void> updateExpendForDaily(int cost) async {
+    _firebaseFirestore.runTransaction((transaction) async {
+      //secure snapshot
+      final secureSnapshot = await transaction.get(_firebaseFirestore
+          .collection("${DateTime.now().year}Collection")
+          .doc("${DateTime.now().year},${DateTime.now().month}"));
+
+      try {
+        final map = secureSnapshot.get("dateTime") as Map<String, dynamic>;
+        final todayMap = map[dailyMapKey] as Map<String, dynamic>;
+        final int totalExpend = todayMap["expend"];
+        transaction.set(
+            secureSnapshot.reference,
+            {
+              "dateTime": {
+                dailyMapKey: {
+                  "expend": totalExpend + cost,
+                },
+              },
+            },
+            SetOptions(merge: true));
+      } catch (e) {
+        debugPrint("*********Error get totalOrder and Price $e**");
+        transaction.set(
+            secureSnapshot.reference,
+            {
+              "dateTime": {
+                dailyMapKey: {
+                  "expend": cost,
+                }
+              },
+            },
+            SetOptions(merge: true));
+      }
+    });
+  }
+
+  //Update Expend in today Map
+  Future<void> updateExpendForMonthly(int cost) async {
+    _firebaseFirestore.runTransaction((transaction) async {
+      //secure snapshot
+      final secureSnapshot = await transaction.get(_firebaseFirestore
+          .collection("${DateTime.now().year}Collection")
+          .doc("${DateTime.now().year},${DateTime.now().month}"));
+      debugPrint("*******Monthly:$secureSnapshot****");
+
+      try {
+        final int totalExpend = secureSnapshot.get("expend");
+        transaction.set(
+            secureSnapshot.reference,
+            {
+              "expend": totalExpend + cost,
+            },
+            SetOptions(merge: true));
+      } catch (e) {
+        debugPrint("*********Error get totalOrder and Price $e**");
+        transaction.set(
+            secureSnapshot.reference,
+            {
+              "expend": cost,
+            },
+            SetOptions(merge: true));
+      }
+    });
+  }
+
+  //Subtract Expend in today Map
+  Future<void> subtractExpendForDaily(Expend expend) async {
+    _firebaseFirestore.runTransaction((transaction) async {
+      //first change date string to real date time to get expend's day
+      DateTime expendDateTime = DateTime.parse(expend.dateTime);
+      //secure snapshot
+      final secureSnapshot = await transaction.get(_firebaseFirestore
+          .collection("${expendDateTime.year}Collection")
+          .doc("${expendDateTime.year},${expendDateTime.month}"));
+
+      try {
+        final map = secureSnapshot.get("dateTime") as Map<String, dynamic>;
+        final todayMap = map[dailyMapKey] as Map<String, dynamic>;
+        final int totalExpend = todayMap["expend"];
+        transaction.set(
+            secureSnapshot.reference,
+            {
+              "dateTime": {
+                dailyMapKey: {
+                  "expend": totalExpend - expend.cost,
+                },
+              },
+            },
+            SetOptions(merge: true));
+      } catch (e) {
+        debugPrint("*********Error delete expend: $e**");
+        Get.snackbar(
+          "Warning",
+          "Something wrong.please contact to developer",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    });
+  }
+
+  //Subtract Expend in today Map
+  Future<void> subtractExpendForMonthly(Expend expend) async {
+    _firebaseFirestore.runTransaction((transaction) async {
+      //first we change string date to real date time to get day
+      DateTime expendDateTime = DateTime.parse(expend.dateTime);
+      //secure snapshot
+      final secureSnapshot = await transaction.get(_firebaseFirestore
+          .collection("${expendDateTime.year}Collection")
+          .doc("${expendDateTime.year},${expendDateTime.month}"));
+      debugPrint("*******Monthly:$secureSnapshot****");
+
+      try {
+        final int totalExpend = secureSnapshot.get("expend");
+        transaction.set(
+            secureSnapshot.reference,
+            {
+              "expend": totalExpend - expend.cost,
+            },
+            SetOptions(merge: true));
+      } catch (e) {
+        debugPrint("*********Error subtract monthly expend $e**");
+        Get.snackbar(
+          "Warning",
+          "Something wrong.please contact to developer",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
       }
     });
   }

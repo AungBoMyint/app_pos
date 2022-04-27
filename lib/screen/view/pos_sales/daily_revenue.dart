@@ -33,9 +33,9 @@ class DailyRevenue extends StatelessWidget {
                         total: "${_controller.todayRevenue()} ကျပ်",
                       ),
                       CustomCardForSales(
-                        headTitleText: "ယနေ့ ရင်းနှီးငွေ",
+                        headTitleText: "ယနေ့ သုံးစွဲငွေ",
                         color: Colors.blue,
-                        total: "${_controller.todayOriginalRevenue()} ကျပ်",
+                        total: "${_controller.todayExpend()} ကျပ်",
                       ),
                     ],
                   ),
@@ -59,7 +59,7 @@ class DailyRevenue extends StatelessWidget {
                       noteForDailyAnimateBarChart(
                           color: Colors.green, text: "ဝင်ငွေ"),
                       noteForDailyAnimateBarChart(
-                          color: Colors.blue, text: "ရင်းနှီးငွေ"),
+                          color: Colors.blue, text: "သုံးစွဲငွေ"),
                     ],
                   ),
                 ),

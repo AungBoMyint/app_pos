@@ -31,16 +31,18 @@ class YearlyRevenue extends StatelessWidget {
                         total: "${_controller.getCurrentYearRevenue()} ကျပ်",
                       ),
                       CustomCardForSales(
-                        headTitleText: "${DateTime.now().year} ရင်းနှီးငွေ",
+                        headTitleText: "${DateTime.now().year} သုံးစွဲငွေ",
                         color: Colors.blue,
-                        total: "${_controller.getCurrentYearCost()} ကျပ်",
+                        total: "${_controller.getCurrentYearExpend()} ကျပ်",
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 15),
                 //
-                const StackedAreaCustomColorLineChart(),
+                const Expanded(
+                  child: StackedAreaCustomColorLineChart(),
+                ),
                 //Note For Yearly LineChart
                 Padding(
                   padding: const EdgeInsets.only(left: 30, right: 30),
@@ -52,7 +54,7 @@ class YearlyRevenue extends StatelessWidget {
                       noteForDailyAnimateBarChart(
                           color: Colors.green, text: "ဝင်ငွေ"),
                       noteForDailyAnimateBarChart(
-                          color: Colors.blue, text: "ရင်းနှီးငွေ"),
+                          color: Colors.blue, text: "သုံးစွဲငွေ"),
                     ],
                   ),
                 ),

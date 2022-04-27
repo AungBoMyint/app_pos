@@ -11,9 +11,14 @@ class OrderAndTotal with _$OrderAndTotal{
   factory OrderAndTotal({
     @JsonKey(nullable: true)
     required List<OrderData>? orderDataList,
-    required int totalOrder,
-    required int originalTotalRevenue,
-    required int totalRevenue,
+    @JsonKey(nullable: true,defaultValue: 0)
+    int? totalOrder,
+    @JsonKey(nullable: true,defaultValue: 0)
+     int? originalTotalRevenue,
+     @JsonKey(nullable: true,defaultValue: 0)
+   int? totalRevenue,
+    @JsonKey(nullable: true,defaultValue: 0)
+    int? expend,
   }) = _OrderAndTotal;
 
   factory OrderAndTotal.fromJson(Map<String, dynamic> json) =>

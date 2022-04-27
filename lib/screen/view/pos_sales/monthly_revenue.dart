@@ -34,16 +34,16 @@ class MonthlyRevenue extends StatelessWidget {
                     ),
                     CustomCardForSales(
                       headTitleText:
-                          "${_controller.getMonthName(_controller.getCurrentMonthDateTime())} ရင်းနှီးငွေ",
+                          "${_controller.getMonthName(_controller.getCurrentMonthDateTime())} သုံးစွဲငွေ",
                       color: Colors.blue,
-                      total: "${_controller.monthlyOriginalRevenue()} ကျပ်",
+                      total: "${_controller.monthlyExpend()} ကျပ်",
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 15),
 
-              const WeeklyBarChart(),
+              Expanded(child: const WeeklyBarChart()),
 
               //Note For Monthly LineChart
               Padding(
@@ -56,7 +56,7 @@ class MonthlyRevenue extends StatelessWidget {
                     noteForDailyAnimateBarChart(
                         color: Colors.green, text: "ဝင်ငွေ"),
                     noteForDailyAnimateBarChart(
-                        color: Colors.blue, text: "ရင်းနှီးငွေ"),
+                        color: Colors.blue, text: "သုံးစွဲငွေ"),
                   ],
                 ),
               ),

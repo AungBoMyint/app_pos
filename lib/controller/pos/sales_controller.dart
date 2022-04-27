@@ -1,9 +1,11 @@
 import 'dart:collection';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pos_and_ecommerce/controller/home_controller.dart';
+import 'package:pos_and_ecommerce/utils/utils.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../model/pos/chart_data.dart';
@@ -42,7 +44,7 @@ class SalesController extends GetxController {
     percentageController.text = "";
   }
 
-  Future<void> addCoupon() async {
+  /*Future<void> addCoupon() async {
     _controller
         .addCoupon(
           coupon: Coupon(
@@ -55,7 +57,7 @@ class SalesController extends GetxController {
           ),
         )
         .then((value) => refreshCoupon());
-  }
+  }*/
 
   void changeExpireDate(DateTime dateTime) {
     expireDate.value = dateTime;
@@ -73,7 +75,7 @@ class SalesController extends GetxController {
     var result = 0;
     try {
       monthlyDataList.value!.forEach((element) {
-        result += element.totalRevenue;
+        result += element.totalRevenue ?? 0;
       });
     } catch (e) {
       result = 0;
@@ -85,7 +87,19 @@ class SalesController extends GetxController {
     var result = 0;
     try {
       monthlyDataList.value!.forEach((element) {
-        result += element.originalTotalRevenue;
+        result += element.originalTotalRevenue ?? 0;
+      });
+    } catch (e) {
+      result = 0;
+    }
+    return result;
+  }
+
+  int getCurrentYearExpend() {
+    var result = 0;
+    try {
+      monthlyDataList.value!.forEach((element) {
+        result += element.expend ?? 0;
       });
     } catch (e) {
       result = 0;
@@ -135,6 +149,21 @@ class SalesController extends GetxController {
     return result;
   }
 
+  int monthlyExpend() {
+    var result = 0;
+    try {
+      result = monthlyDataList.value
+              ?.firstWhere((element) =>
+                  element.dateTimeMonth.month == DateTime.now().month)
+              .expend ??
+          0;
+    } catch (e) {
+      result = result;
+      debugPrint("*****No order in this month*******");
+    }
+    return result;
+  }
+
   int monthlyProfit() {
     var result = 0;
     try {
@@ -161,12 +190,12 @@ class SalesController extends GetxController {
     return result;
   }
 
-  String todayOriginalRevenue() {
+  String todayExpend() {
     var result = "0 ကျပ်";
     try {
       var map = dailySplayTreeMapList.value!
           .firstWhere((element) => element.key == DateTime.now().day);
-      result = "${map.value.value.originalTotalRevenue}";
+      result = "${map.value.value.expend}";
     } catch (e) {
       result = result;
       debugPrint("********No order in today!.*********");
@@ -179,8 +208,8 @@ class SalesController extends GetxController {
     try {
       var map = dailySplayTreeMapList.value!
           .firstWhere((element) => element.key == DateTime.now().day);
-      var total = (map.value.value.totalRevenue) -
-          (map.value.value.originalTotalRevenue);
+      var total = (map.value.value.totalRevenue ?? 0) -
+          (map.value.value.originalTotalRevenue ?? 0);
       result = "$total";
     } catch (e) {
       result = result;
@@ -244,7 +273,7 @@ class SalesController extends GetxController {
         index = 0;
         totalRevenueIn7Days = 0;
       }
-      totalRevenueIn7Days += item.value.value.totalRevenue;
+      totalRevenueIn7Days += item.value.value.totalRevenue ?? 0;
       index++;
     }
     debugPrint("**********Weekly ChartDataList: ${resultList.length}******");
@@ -252,10 +281,13 @@ class SalesController extends GetxController {
   }
 
   DateTime getCurrentMonthDateTime() {
-    return monthlyDataList.value!
-        .firstWhere(
-            (element) => element.dateTimeMonth.month == DateTime.now().month)
-        .dateTimeMonth;
+    if (!(monthlyDataList.value == null) && monthlyDataList.value!.isNotEmpty) {
+      return monthlyDataList.value!
+          .firstWhere(
+              (element) => element.dateTimeMonth.month == DateTime.now().month)
+          .dateTimeMonth;
+    }
+    return DateTime.now();
   }
 
   @override
@@ -264,20 +296,42 @@ class SalesController extends GetxController {
       debugPrint("****${value.data()}***");
       var dailySplay = SplayTreeMap<int, MapEntry<String, OrderAndTotal>>();
       DailyOrderData.fromJson(value.data()!).dateTime.forEach((key, value) {
-        debugPrint("********documentKey: $key*****");
+        log("********documentKey: $key*****");
         dailySplay[getDay(key)] = MapEntry(key, value);
       });
-      dailySplayTreeMapList.value = dailySplay.entries.map((e) => e).toList();
+      dailySplayTreeMapList.value = startDateToEndDateList().map((e) {
+        if (dailySplay.containsKey(e.day)) {
+          return MapEntry(e.day,
+              MapEntry(dailySplay[e.day]!.key, dailySplay[e.day]!.value));
+        }
+        return MapEntry(
+            e.day,
+            MapEntry(
+                "${e.year}-${e.month}-${e.day}",
+                OrderAndTotal(
+                  orderDataList: null,
+                  totalOrder: 0,
+                  totalRevenue: 0,
+                  originalTotalRevenue: 0,
+                  expend: 0,
+                )));
+      }).toList(); //this is new version
+      /*dailySplayTreeMapList.value = mapList.map((e) {
+        debugPrint("Daily: ${e.key}");
+        return e;
+      }).toList(); */ //this is old version
 
       for (var i = 0; i < dailySplayTreeMapList.value!.length; i += 7) {
-        int end = i + 7 < dailySplayTreeMapList.value!.length
+        int end = i + 7 <= dailySplayTreeMapList.value!.length
             ? i + 7
             : dailySplayTreeMapList.value!.length;
         dailyChunkDataList.value!
             .add(dailySplayTreeMapList.value!.sublist(i, end));
+        debugPrint("**********End: $end");
       }
       // monthlySdailySplayTreeMap.value = dailySplayTreeMap.value;
-      debugPrint("*******DailySplayTreeMap:$dailySplayTreeMapList");
+      debugPrint(
+          "*******DailySplayTreeMap:${dailySplayTreeMapList.value!.length}");
     });
 
     await _controller.getMonthsSales().then((value) {

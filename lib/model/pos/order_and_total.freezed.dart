@@ -24,14 +24,16 @@ class _$OrderAndTotalTearOff {
 
   _OrderAndTotal call(
       {@JsonKey(nullable: true) required List<OrderData>? orderDataList,
-      required int totalOrder,
-      required int originalTotalRevenue,
-      required int totalRevenue}) {
+      @JsonKey(nullable: true, defaultValue: 0) int? totalOrder,
+      @JsonKey(nullable: true, defaultValue: 0) int? originalTotalRevenue,
+      @JsonKey(nullable: true, defaultValue: 0) int? totalRevenue,
+      @JsonKey(nullable: true, defaultValue: 0) int? expend}) {
     return _OrderAndTotal(
       orderDataList: orderDataList,
       totalOrder: totalOrder,
       originalTotalRevenue: originalTotalRevenue,
       totalRevenue: totalRevenue,
+      expend: expend,
     );
   }
 
@@ -47,9 +49,14 @@ const $OrderAndTotal = _$OrderAndTotalTearOff();
 mixin _$OrderAndTotal {
   @JsonKey(nullable: true)
   List<OrderData>? get orderDataList => throw _privateConstructorUsedError;
-  int get totalOrder => throw _privateConstructorUsedError;
-  int get originalTotalRevenue => throw _privateConstructorUsedError;
-  int get totalRevenue => throw _privateConstructorUsedError;
+  @JsonKey(nullable: true, defaultValue: 0)
+  int? get totalOrder => throw _privateConstructorUsedError;
+  @JsonKey(nullable: true, defaultValue: 0)
+  int? get originalTotalRevenue => throw _privateConstructorUsedError;
+  @JsonKey(nullable: true, defaultValue: 0)
+  int? get totalRevenue => throw _privateConstructorUsedError;
+  @JsonKey(nullable: true, defaultValue: 0)
+  int? get expend => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -64,9 +71,10 @@ abstract class $OrderAndTotalCopyWith<$Res> {
       _$OrderAndTotalCopyWithImpl<$Res>;
   $Res call(
       {@JsonKey(nullable: true) List<OrderData>? orderDataList,
-      int totalOrder,
-      int originalTotalRevenue,
-      int totalRevenue});
+      @JsonKey(nullable: true, defaultValue: 0) int? totalOrder,
+      @JsonKey(nullable: true, defaultValue: 0) int? originalTotalRevenue,
+      @JsonKey(nullable: true, defaultValue: 0) int? totalRevenue,
+      @JsonKey(nullable: true, defaultValue: 0) int? expend});
 }
 
 /// @nodoc
@@ -84,6 +92,7 @@ class _$OrderAndTotalCopyWithImpl<$Res>
     Object? totalOrder = freezed,
     Object? originalTotalRevenue = freezed,
     Object? totalRevenue = freezed,
+    Object? expend = freezed,
   }) {
     return _then(_value.copyWith(
       orderDataList: orderDataList == freezed
@@ -93,15 +102,19 @@ class _$OrderAndTotalCopyWithImpl<$Res>
       totalOrder: totalOrder == freezed
           ? _value.totalOrder
           : totalOrder // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       originalTotalRevenue: originalTotalRevenue == freezed
           ? _value.originalTotalRevenue
           : originalTotalRevenue // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       totalRevenue: totalRevenue == freezed
           ? _value.totalRevenue
           : totalRevenue // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
+      expend: expend == freezed
+          ? _value.expend
+          : expend // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -115,9 +128,10 @@ abstract class _$OrderAndTotalCopyWith<$Res>
   @override
   $Res call(
       {@JsonKey(nullable: true) List<OrderData>? orderDataList,
-      int totalOrder,
-      int originalTotalRevenue,
-      int totalRevenue});
+      @JsonKey(nullable: true, defaultValue: 0) int? totalOrder,
+      @JsonKey(nullable: true, defaultValue: 0) int? originalTotalRevenue,
+      @JsonKey(nullable: true, defaultValue: 0) int? totalRevenue,
+      @JsonKey(nullable: true, defaultValue: 0) int? expend});
 }
 
 /// @nodoc
@@ -137,6 +151,7 @@ class __$OrderAndTotalCopyWithImpl<$Res>
     Object? totalOrder = freezed,
     Object? originalTotalRevenue = freezed,
     Object? totalRevenue = freezed,
+    Object? expend = freezed,
   }) {
     return _then(_OrderAndTotal(
       orderDataList: orderDataList == freezed
@@ -146,15 +161,19 @@ class __$OrderAndTotalCopyWithImpl<$Res>
       totalOrder: totalOrder == freezed
           ? _value.totalOrder
           : totalOrder // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       originalTotalRevenue: originalTotalRevenue == freezed
           ? _value.originalTotalRevenue
           : originalTotalRevenue // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       totalRevenue: totalRevenue == freezed
           ? _value.totalRevenue
           : totalRevenue // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
+      expend: expend == freezed
+          ? _value.expend
+          : expend // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -165,9 +184,10 @@ class __$OrderAndTotalCopyWithImpl<$Res>
 class _$_OrderAndTotal implements _OrderAndTotal {
   _$_OrderAndTotal(
       {@JsonKey(nullable: true) required this.orderDataList,
-      required this.totalOrder,
-      required this.originalTotalRevenue,
-      required this.totalRevenue});
+      @JsonKey(nullable: true, defaultValue: 0) this.totalOrder,
+      @JsonKey(nullable: true, defaultValue: 0) this.originalTotalRevenue,
+      @JsonKey(nullable: true, defaultValue: 0) this.totalRevenue,
+      @JsonKey(nullable: true, defaultValue: 0) this.expend});
 
   factory _$_OrderAndTotal.fromJson(Map<String, dynamic> json) =>
       _$$_OrderAndTotalFromJson(json);
@@ -176,15 +196,21 @@ class _$_OrderAndTotal implements _OrderAndTotal {
   @JsonKey(nullable: true)
   final List<OrderData>? orderDataList;
   @override
-  final int totalOrder;
+  @JsonKey(nullable: true, defaultValue: 0)
+  final int? totalOrder;
   @override
-  final int originalTotalRevenue;
+  @JsonKey(nullable: true, defaultValue: 0)
+  final int? originalTotalRevenue;
   @override
-  final int totalRevenue;
+  @JsonKey(nullable: true, defaultValue: 0)
+  final int? totalRevenue;
+  @override
+  @JsonKey(nullable: true, defaultValue: 0)
+  final int? expend;
 
   @override
   String toString() {
-    return 'OrderAndTotal(orderDataList: $orderDataList, totalOrder: $totalOrder, originalTotalRevenue: $originalTotalRevenue, totalRevenue: $totalRevenue)';
+    return 'OrderAndTotal(orderDataList: $orderDataList, totalOrder: $totalOrder, originalTotalRevenue: $originalTotalRevenue, totalRevenue: $totalRevenue, expend: $expend)';
   }
 
   @override
@@ -199,7 +225,8 @@ class _$_OrderAndTotal implements _OrderAndTotal {
             const DeepCollectionEquality()
                 .equals(other.originalTotalRevenue, originalTotalRevenue) &&
             const DeepCollectionEquality()
-                .equals(other.totalRevenue, totalRevenue));
+                .equals(other.totalRevenue, totalRevenue) &&
+            const DeepCollectionEquality().equals(other.expend, expend));
   }
 
   @override
@@ -208,7 +235,8 @@ class _$_OrderAndTotal implements _OrderAndTotal {
       const DeepCollectionEquality().hash(orderDataList),
       const DeepCollectionEquality().hash(totalOrder),
       const DeepCollectionEquality().hash(originalTotalRevenue),
-      const DeepCollectionEquality().hash(totalRevenue));
+      const DeepCollectionEquality().hash(totalRevenue),
+      const DeepCollectionEquality().hash(expend));
 
   @JsonKey(ignore: true)
   @override
@@ -223,10 +251,12 @@ class _$_OrderAndTotal implements _OrderAndTotal {
 
 abstract class _OrderAndTotal implements OrderAndTotal {
   factory _OrderAndTotal(
-      {@JsonKey(nullable: true) required List<OrderData>? orderDataList,
-      required int totalOrder,
-      required int originalTotalRevenue,
-      required int totalRevenue}) = _$_OrderAndTotal;
+          {@JsonKey(nullable: true) required List<OrderData>? orderDataList,
+          @JsonKey(nullable: true, defaultValue: 0) int? totalOrder,
+          @JsonKey(nullable: true, defaultValue: 0) int? originalTotalRevenue,
+          @JsonKey(nullable: true, defaultValue: 0) int? totalRevenue,
+          @JsonKey(nullable: true, defaultValue: 0) int? expend}) =
+      _$_OrderAndTotal;
 
   factory _OrderAndTotal.fromJson(Map<String, dynamic> json) =
       _$_OrderAndTotal.fromJson;
@@ -235,11 +265,17 @@ abstract class _OrderAndTotal implements OrderAndTotal {
   @JsonKey(nullable: true)
   List<OrderData>? get orderDataList;
   @override
-  int get totalOrder;
+  @JsonKey(nullable: true, defaultValue: 0)
+  int? get totalOrder;
   @override
-  int get originalTotalRevenue;
+  @JsonKey(nullable: true, defaultValue: 0)
+  int? get originalTotalRevenue;
   @override
-  int get totalRevenue;
+  @JsonKey(nullable: true, defaultValue: 0)
+  int? get totalRevenue;
+  @override
+  @JsonKey(nullable: true, defaultValue: 0)
+  int? get expend;
   @override
   @JsonKey(ignore: true)
   _$OrderAndTotalCopyWith<_OrderAndTotal> get copyWith =>

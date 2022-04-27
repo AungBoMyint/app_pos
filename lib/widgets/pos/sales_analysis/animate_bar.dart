@@ -1,11 +1,11 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/pos/sales_controller.dart';
-
 
 class BarChartSample1 extends StatefulWidget {
   final List<Color> availableColors = const [
@@ -24,7 +24,7 @@ class BarChartSample1 extends StatefulWidget {
 }
 
 class BarChartSample1State extends State<BarChartSample1> {
-  final Color barBackgroundColor = const Color(0xff72d8bf);
+  final Color barBackgroundColor = Colors.white; //const Color(0xff72d8bf);
   final Duration animDuration = const Duration(milliseconds: 250);
 
   int touchedIndex = -1;
@@ -49,22 +49,19 @@ class BarChartSample1State extends State<BarChartSample1> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-
                   const SizedBox(
                     height: 4,
                   ),
                   const Text(
-                    'ယနေ့ ၏  ဝင်ငွေ ၊ အမြတ် နှင့် ရင်းနှီးထားသော ငွေများ',
+                    'ယနေ့ ၏  ဝင်ငွေ ၊ အမြတ် နှင့် သုံးစွဲထားသော ငွေများ',
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 15,
                         fontWeight: FontWeight.bold),
                   ),
-
                   const SizedBox(
                     height: 10,
                   ),
-
                   Row(children: [
                     const SizedBox(width: 15),
                     ElevatedButton(
@@ -81,7 +78,6 @@ class BarChartSample1State extends State<BarChartSample1> {
                     ),
                     //Next Button
                   ]),
-
                   Expanded(
                     child: Obx(() {
                       return BarChart(
@@ -129,13 +125,15 @@ class BarChartSample1State extends State<BarChartSample1> {
     double y3, {
     bool isTouched = false,
     Color barColor = Colors.green,
-    double width = 20,
+    double width = 15,
     List<int> showTooltips = const [],
   }) {
+    debugPrint("*******Y1: $y1\nY2: $y2\nY3: $y3");
     return BarChartGroupData(
       x: x,
       barRods: [
         BarChartRodData(
+          borderRadius: BorderRadius.zero,
           toY: y1,
           color: Colors.red,
           width: width,
@@ -149,6 +147,7 @@ class BarChartSample1State extends State<BarChartSample1> {
           ),
         ),
         BarChartRodData(
+          borderRadius: BorderRadius.zero,
           toY: y2,
           color: Colors.green,
           width: width,
@@ -162,6 +161,7 @@ class BarChartSample1State extends State<BarChartSample1> {
           ),
         ),
         BarChartRodData(
+          borderRadius: BorderRadius.zero,
           toY: y3,
           color: Colors.blue,
           width: width,
@@ -188,11 +188,11 @@ class BarChartSample1State extends State<BarChartSample1> {
           .dailyChunkDataList.value![_controller.barIndex.value][index];
       return makeGroupData(
           index,
-          (item.value.value.totalRevenue -
-                  item.value.value.originalTotalRevenue) +
+          ((item.value.value.totalRevenue ?? 0) -
+                  (item.value.value.originalTotalRevenue ?? 0)) +
               .0,
-          item.value.value.totalRevenue + .0,
-          item.value.value.originalTotalRevenue + .0,
+          (item.value.value.totalRevenue ?? 0) + .0,
+          (item.value.value.expend ?? 0) + .0, //total cost
           isTouched: index == touchedIndex,
           showTooltips: [0, 1, 2]);
     });
@@ -202,9 +202,11 @@ class BarChartSample1State extends State<BarChartSample1> {
   BarChartData mainBarData() {
     SalesController _controller = Get.find();
     return BarChartData(
-      groupsSpace: 0,
+      groupsSpace: 40,
+      alignment: BarChartAlignment.center,
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
+            fitInsideHorizontally: true,
             maxContentWidth: 150,
             tooltipBgColor: Colors.blueGrey.withOpacity(0.7),
             getTooltipItem: (group, groupIndex, rod, rodIndex) {

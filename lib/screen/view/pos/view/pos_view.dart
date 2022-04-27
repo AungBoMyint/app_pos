@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:pos_and_ecommerce/routes/routes.dart';
+import 'package:pos_and_ecommerce/screen/view/scanner/bar_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import 'package:get/get.dart';
@@ -9,6 +13,7 @@ import 'package:pos_and_ecommerce/controller/home_controller.dart';
 import '../../../../utils/theme.dart';
 import '../../../../widgets/dashboard_menu/dashboard_menu.dart';
 import '../../../../widgets/pos/button/button.dart';
+import '../../../../widgets/search_bar/search_bar.dart';
 import '../../pos_checkout/view/pos_checkout_view.dart';
 import '../../product/view/product_view.dart';
 import '../controller/pos_controller.dart';
@@ -56,12 +61,20 @@ class PosView extends StatelessWidget {
                       color: Colors.green,
                       onTap: () => Get.to(() => const ProductView()),
                     ),
-                    /*MenuItem(
+                    MenuItem(
                       icon: FontAwesomeIcons.boxes,
-                      label: "Product Category",
+                      label: "Expend Category",
                       color: Colors.orange,
-                      onTap: () => {}, // Get.to(ProductCategoryView()),
-                    ),*/
+                      onTap: () => Get.toNamed(
+                          expendCategoryUrl), // Get.to(ProductCategoryView()),
+                    ),
+                    MenuItem(
+                      icon: FontAwesomeIcons.boxes,
+                      label: "Expend",
+                      color: Colors.orange,
+                      onTap: () => Get.toNamed(
+                          expendUrl), // Get.to(ProductCategoryView()),
+                    ),
                     MenuItem(
                       icon: FontAwesomeIcons.boxes,
                       label: "Inventory Management",
@@ -92,15 +105,57 @@ class PosView extends StatelessWidget {
           appBar: AppBar(
             title: Row(
               children: [
-                QrImage(
-                  data: "${controller.orderDetail!["id"]}",
-                  version: QrVersions.auto,
-                  size: 50.0,
+                IconButton(
+                  onPressed: () => controller.startScan(),
+                  icon: Icon(
+                    FontAwesomeIcons.barcode,
+                    size: 30,
+                  ),
                 ),
                 Text("Pos"),
               ],
             ),
             actions: [
+              //Search
+              if (controller.search.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: InkWell(
+                    onTap: () {
+                      controller.search = "";
+                      controller.update();
+                    },
+                    child: Card(
+                      color: theme.warning,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 8.0,
+                          right: 8.0,
+                          top: 4.0,
+                          bottom: 4.0,
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Search: ${controller.search}",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              SearchIcon(
+                id: "product_search",
+                onSearch: (search) {
+                  log("Search : $search");
+                  controller.search = search;
+                  controller.update();
+                },
+              ),
+              //Cart
               InkWell(
                 onTap: () => controller.updateFilter("Your Order"),
                 child: Padding(
@@ -232,11 +287,35 @@ class PosView extends StatelessWidget {
                       itemBuilder: (context, index) {
                         var item = homeController.items[index];
 
+                        if (controller.search != null) {
+                          log("search >>> ${controller.search}");
+                          if (controller.search.isNotEmpty &&
+                              !item.productName
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(controller.search.toLowerCase())) {
+                            return Container();
+                          }
+                        }
+
                         if (controller.categoryNameFilter != "All" &&
                             controller.categoryNameFilter != "Your Order") {
                           if (item.category != controller.categoryNameFilter) {
                             return Container();
                           }
+                        }
+
+                        if ((controller.categoryNameFilter == "scanning") &&
+                            (controller.barcodeResult == null)) {
+                          return const Center(
+                            child: Text("No product found!."),
+                          );
+                        }
+
+                        if ((controller.categoryNameFilter == "scanning") &&
+                            !(controller.barcodeResult == null) &&
+                            (controller.barcodeResult != item.id)) {
+                          return Container();
                         }
 
                         var searchList = controller.orderItems

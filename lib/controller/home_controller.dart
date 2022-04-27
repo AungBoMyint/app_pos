@@ -1,11 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/state_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pos_and_ecommerce/constant/constant.dart';
@@ -14,6 +10,8 @@ import 'package:pos_and_ecommerce/widgets/show_loading/show_loading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/constant.dart';
+import '../model/pos/expend.dart';
+import '../model/pos/expend_category.dart';
 import '../model/product_item.dart';
 import '../model/pos/coupon.dart';
 import '../routes/routes.dart';
@@ -32,8 +30,7 @@ class HomeController extends GetxController {
 
   final RxBool phoneState = false.obs;
   final codeSentOnWeb = false.obs; //codeSentOnWeb on Web
-  final TextEditingController _phoneCodeController =
-      TextEditingController(); //On Web
+
   late SharedPreferences
       sharedPref; //Share Preference to Store User's Order Data
   String? townshipName; //Township Name
@@ -41,9 +38,8 @@ class HomeController extends GetxController {
   var bankSlipImage = "".obs;
   Map<String, dynamic> townShipNameAndFee = {}; //Township Name and Fee
 
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController verificationController = TextEditingController();
-
+  RxList<ExpendCategory> expendCategoryList = <ExpendCategory>[].obs;
+  RxList<Expend> expendList = <Expend>[].obs;
 
   final RxList<ProductItem> items = <ProductItem>[].obs;
   final RxList<ProductItem> brandItems = <ProductItem>[].obs; //Brand Item
@@ -81,6 +77,31 @@ class HomeController extends GetxController {
         orderItemList.value =
             event.docs.map((e) => OrderItem.fromJson(e.data())).toList();
         debugPrint("*****Total purchase: ${orderItemList.length}");
+      }
+    });
+
+    //Watch Expend Category
+    /**TODO TO MOVE THIS FUNCTION ONLY IF USER IS ADMIN */
+    _database.watch(expendCategoryCollection).listen((event) {
+      if (event.docs.isEmpty) {
+        expendCategoryList.clear();
+      } else {
+        expendCategoryList.value = event.docs
+            .map((e) => ExpendCategory.fromJson(e.data(), e))
+            .toList();
+        debugPrint("*****ExpendCategories: ${expendCategoryList.length}");
+      }
+    });
+
+    //Watch Expends
+    /**TODO TO MOVE THIS FUNCTION ONLY IF USER IS ADMIN */
+    _database.watch(expendCollection).listen((event) {
+      if (event.docs.isEmpty) {
+        expendList.clear();
+      } else {
+        expendList.value =
+            event.docs.map((e) => Expend.fromJson(e.data())).toList();
+        debugPrint("*****Expends: ${expendList.length}");
       }
     });
 
@@ -127,13 +148,31 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> addCoupon({required Coupon coupon}) async {
+  //Add Expend Category
+  Future<void> addExpendCategory({required ExpendCategory category}) async {
+    await _database.write(expendCategoryCollection, data: category.toJson());
+  }
+
+  //Delete Expend Category
+  Future<void> deleteExpendCategory({required String pathID}) async {
+    await _database.delete(expendCategoryCollection, path: pathID);
+  }
+
+  Future<void> saveExpend({required Expend expend}) async {
+    await _database.writeExpend(expend);
+  }
+
+  Future<void> deleteExpend({required Expend expend}) async {
+    await _database.deleteExpend(expend);
+  }
+
+  /* Future<void> addCoupon({required Coupon coupon}) async {
     _database.uploadCoupon(coupon);
   }
 
   Future<void> removeCoupon({required String documentID}) async {
     _database.deleteCoupon(documentID);
-  }
+  }*/
 
   String? checkCouponIsValid(String? value) {
     return (couponList.isNotEmpty &&

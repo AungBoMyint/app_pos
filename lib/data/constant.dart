@@ -20,6 +20,7 @@ const String itemCollection = 'items';
 const String categoryCollection = "categories";
 const String purchaseCollection = 'purchases';
 const String brandCollection = 'brandProducts';
+const String expendCategoryCollection = "expendCategories";
 /*const List<String> priceList = [
   '၁ ထည် လက်လီ ဈေးနှုန်း',
   'လက်ကား ဈေးနှုန်း',
