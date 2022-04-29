@@ -2,26 +2,32 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:pos_and_ecommerce/screen/view/pos_bluetooth_print/controller/blue_print_controller.dart';
+import 'package:pos_and_ecommerce/screen/view/pos_bluetooth_print/view/blue_tooth_screen.dart';
 
-import '../model/product_item.dart';
-import '../utils/theme.dart';
-import '../widgets/pos/button/button.dart';
-import '../widgets/textfield/row_textfield.dart';
-import '../widgets/textfield/textfield_format.dart';
+import '../../../model/order_item.dart';
+import '../../../model/product_item.dart';
+import '../../../utils/theme.dart';
+import '../../../widgets/pos/button/button.dart';
+import '../../../widgets/textfield/row_textfield.dart';
+import '../../../widgets/textfield/textfield_format.dart';
 
 class OrderDetailView extends StatelessWidget {
   final List<ProductItem> productList;
   final int pay;
   final int total;
+  final OrderItem item;
   const OrderDetailView({
     Key? key,
     required this.productList,
     required this.pay,
     required this.total,
+    required this.item,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    BluePrintController _blueController = Get.find();
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -177,12 +183,21 @@ class OrderDetailView extends StatelessWidget {
                   width: 100.0,
                 ),
                 Expanded(
-                  child: ExButton(
-                    color: ApplicationTheme().primary,
-                    label: "Save",
-                    height: 40.0,
-                    onPressed: () {},
-                  ),
+                  child: Obx(() {
+                    return _blueController.isInitialized.value
+                        ? Builder(builder: (context) {
+                            return ExButton(
+                              color: ApplicationTheme().primary,
+                              icon: Icons.print,
+                              label: "Print",
+                              height: 40.0,
+                              onPressed: () {
+                                _blueController.startBlueScan(item: item);
+                              },
+                            );
+                          })
+                        : const SizedBox(height: 0);
+                  }),
                 ),
               ],
             ),

@@ -1,18 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:pos_and_ecommerce/routes/routes.dart';
 import 'package:pos_and_ecommerce/controller/pos/order_controller.dart';
 import 'package:pos_and_ecommerce/controller/main_navigation_controller.dart';
+import 'package:pos_and_ecommerce/screen/view/pos_bluetooth_print/controller/blue_print_controller.dart';
 import 'package:pos_and_ecommerce/utils/theme.dart';
 
 import 'controller/home_controller.dart';
 import 'screen/view/pos/controller/pos_controller.dart';
-
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +26,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  
   @override
   void initState() {
     super.initState();
@@ -37,6 +33,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(BluePrintController());
     Get.put(MainNavigationController());
     Get.put(OrderController());
     Get.put(PosController());

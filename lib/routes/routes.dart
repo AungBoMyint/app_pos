@@ -3,7 +3,7 @@ import 'package:pos_and_ecommerce/model/pos/expend_category.dart';
 import 'package:pos_and_ecommerce/screen/view/expend/view/expend_view.dart';
 
 import '../controller/home_controller.dart';
-import '../screen/blue_tooth_screen.dart';
+import '../screen/view/pos_bluetooth_print/view/blue_tooth_screen.dart';
 import '../screen/home_screen.dart';
 import '../screen/item_upload_screen.dart';
 import '../screen/view/auth/login/view/login_view.dart';
