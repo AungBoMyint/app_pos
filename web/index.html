@@ -29,10 +29,32 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>pos_and_ecommerce</title>
+  <title>Cindy POS</title>
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
+<!-- This script installs service_worker.js to provide PWA functionality to
+     application. For more information, see:
+     https://developers.google.com/web/fundamentals/primers/service-workers -->
+
+<script>
+      var firebaseConfig = {
+        apiKey: "AIzaSyDAxHVAvqGHhAAMQwFxGrezANqi_IxDDl4",
+        authDomain: "ecommerce-18bac.firebaseapp.com",
+        databaseURL: "https://ecommerce-18bac.firebaseio.com",
+        projectId: "ecommerce-18bac",
+        storageBucket: "ecommerce-18bac.appspot.com",
+        messagingSenderId: "226116069844",
+        appId: "1:226116069844:web:c3f903ea5e8d98cdb2ce41"
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->

@@ -70,7 +70,6 @@ dependencies:
   json_annotation: ^4.4.0
   syncfusion_flutter_charts: ^20.1.48
   colours: ^0.0.2
-  flutter_datetime_picker: ^1.5.1
   google_fonts: ^2.3.1
   qr_flutter: ^4.0.0
   google_sign_in: ^5.3.0
@@ -78,6 +77,10 @@ dependencies:
   flutter_barcode_scanner: ^2.0.0
   quiver: ^3.0.1+1
   #esc_pos_bluetooth: ^0.4.1
+  flutter_datetime_picker:
+    git:
+      url: https://github.com/Realank/flutter_datetime_picker.git
+      ref: master
 
 dev_dependencies:
   flutter_test:
