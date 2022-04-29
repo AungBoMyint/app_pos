@@ -43,18 +43,18 @@ class DashboardMenu extends StatelessWidget {
               onTap: () => item.onTap(),
               child: Container(
                 width: itemWidth,
-                height: itemWidth + 16,
+                height: itemWidth,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 8.0,
+                      height: 50,
                     ),
                     Icon(
                       item.icon,
                       color: item.color,
-                      size: 32.0,
+                      size: 100,
                     ),
                     SizedBox(
                       height: 10.0,
@@ -64,7 +64,7 @@ class DashboardMenu extends StatelessWidget {
                         item.label,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 11.0,
+                          fontSize: 16,
                           color: item.color,
                         ),
                       ),

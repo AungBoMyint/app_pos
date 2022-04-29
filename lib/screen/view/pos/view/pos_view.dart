@@ -37,16 +37,16 @@ class PosView extends StatelessWidget {
         if (controller.orderDetail == null) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text("POS v1"),
+              title: const Text("CINDY POS"),
             ),
             body: Column(
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              // mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SalesStatistic(),
-                const SizedBox(
-                  height: 16.0,
-                ),
+                // const SizedBox(
+                //   height: 50.0,
+                // ),
                 DashboardMenu(
                   items: [
                     MenuItem(
@@ -112,7 +112,7 @@ class PosView extends StatelessWidget {
                     size: 30,
                   ),
                 ),
-                Text("Pos"),
+                Text("POS"),
               ],
             ),
             actions: [
@@ -391,7 +391,7 @@ class PosView extends StatelessWidget {
                                         Row(
                                           children: [
                                             Text(
-                                              "${item.price}ks",
+                                              "${item.price} ",
                                               style: const TextStyle(
                                                 fontSize: 14.0,
                                                 fontWeight: FontWeight.bold,
@@ -471,7 +471,7 @@ class PosView extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      "Total: ${controller.total}ks",
+                      "Total: ${controller.total} ကျပ်",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16.0,

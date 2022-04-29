@@ -49,8 +49,8 @@ class PosCheckoutView extends StatelessWidget {
                             children: [
                               CachedNetworkImage(
                                 imageUrl: item.image,
-                                height: 50,
-                                width: 50,
+                                height: 100,
+                                width: 90,
                                 fit: BoxFit.cover,
                                 progressIndicatorBuilder:
                                     (context, url, status) {
@@ -72,7 +72,7 @@ class PosCheckoutView extends StatelessWidget {
                               ),
                               Expanded(
                                 child: Container(
-                                  height: 50.0,
+                                  height: 70,
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -96,7 +96,7 @@ class PosCheckoutView extends StatelessWidget {
                                       Row(
                                         children: [
                                           Text(
-                                            "${item.price}ks",
+                                            "${item.price} ကျပ်",
                                             style: const TextStyle(
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold,
