@@ -9,7 +9,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../../../controller/pos/order_controller.dart';
 import '../../../utils/theme.dart';
 import '../../../widgets/pos/row_item.dart';
-import '../../order_detail_view.dart';
+import '../order_detail/order_detail_view.dart';
 
 class OrderView extends StatelessWidget {
   const OrderView({Key? key}) : super(key: key);
@@ -126,6 +126,7 @@ class OrderView extends StatelessWidget {
                                       productList: item.itemIdList,
                                       total: item.total,
                                       pay: item.pay,
+                                      item: item,
                                     ));
                               },
                               child: Card(

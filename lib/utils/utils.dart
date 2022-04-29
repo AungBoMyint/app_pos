@@ -1,4 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
+import 'package:pos_and_ecommerce/model/order_item.dart';
+import 'package:pos_and_ecommerce/utils/theme.dart';
+import 'package:pos_and_ecommerce/widgets/pos/button/button.dart';
+
 
 var currentDateTime =
     "${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}";
@@ -18,4 +24,24 @@ List<DateTime> startDateToEndDateList() {
     debugPrint("*****Day: ${index + 1}");
     return DateTime(DateTime.now().year, DateTime.now().month, index + 1);
   });
+}
+
+//BlueWarnning
+void showBlueWarnning() {
+  Get.defaultDialog(
+      barrierDismissible: false,
+      title: "Warnning",
+      content: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              "Please turn on bluetooth.",
+            ),
+            ExButton(
+              color: theme.primary,
+              label: "OK",
+              onPressed: () => Get.back(),
+            ),
+          ]));
 }

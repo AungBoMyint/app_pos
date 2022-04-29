@@ -59,7 +59,7 @@ dependencies:
   hive: ^2.0.5
   hive_flutter: ^1.1.0
   photo_view: ^0.13.0
-  bluetooth_print: ^3.0.1
+  bluetooth_print: ^3.0.0
   cloud_firestore_platform_interface: ^5.5.0
   firebase_storage_platform_interface: ^4.1.0
   firebase_analytics_web: ^0.4.0+8
@@ -77,6 +77,7 @@ dependencies:
   mobile_scanner: ^1.0.0
   flutter_barcode_scanner: ^2.0.0
   quiver: ^3.0.1+1
+  #esc_pos_bluetooth: ^0.4.1
 
 dev_dependencies:
   flutter_test:
