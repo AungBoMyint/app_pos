@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:pos_and_ecommerce/model/pos/expend_category.dart';
 import 'package:pos_and_ecommerce/screen/view/expend/view/expend_view.dart';
+import 'package:pos_and_ecommerce/screen/view/product_category/product_category_view.dart';
 
 import '../controller/home_controller.dart';
 import '../screen/view/pos_bluetooth_print/view/blue_tooth_screen.dart';
@@ -24,6 +25,7 @@ const loginUrl = "/login_url";
 const salesUrl = "/sales_url";
 const inventoryUrl = "/inventory_url";
 const couponUrl = "/coupon_url";
+const productCategoryUrl = "/product_category_url";
 const expendCategoryUrl = "/expend_category_url";
 const expendUrl = "/expend_url";
 
@@ -59,6 +61,10 @@ List<GetPage> routes = [
   GetPage(
     name: expendUrl,
     page: () => const ExpendView(),
+  ),
+   GetPage(
+    name: productCategoryUrl,
+    page: () => const ProductCategoryView(),
   ),
 ];
 

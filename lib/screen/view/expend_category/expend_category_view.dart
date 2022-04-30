@@ -51,7 +51,7 @@ class ExpendCategoryView extends StatelessWidget {
                       label: "Add",
                       height: 36.0,
                       onPressed: () {
-                        _homeController.addExpendCategory(
+                        _homeController.addProductCategory(
                           category: ExpendCategory(
                               category: Input.get("category_name")),
                         );
@@ -88,7 +88,7 @@ class ExpendCategoryView extends StatelessWidget {
                                 Spacer(),
                                 InkWell(
                                   onTap: () async {
-                                    await _homeController.deleteExpendCategory(
+                                    await _homeController.deleteProductCategory(
                                         pathID: item.id!);
                                   },
                                   child: const Text(

@@ -40,6 +40,7 @@ class HomeController extends GetxController {
 
   RxList<ExpendCategory> expendCategoryList = <ExpendCategory>[].obs;
   RxList<Expend> expendList = <Expend>[].obs;
+  RxList<ExpendCategory> productCategoryList = <ExpendCategory>[].obs;
 
   final RxList<ProductItem> items = <ProductItem>[].obs;
   final RxList<ProductItem> brandItems = <ProductItem>[].obs; //Brand Item
@@ -105,6 +106,18 @@ class HomeController extends GetxController {
       }
     });
 
+    //Watch Product Category
+    _database.watch(productCategoryCollection).listen((event) {
+      if (event.docs.isEmpty) {
+        productCategoryList.clear();
+      } else {
+        productCategoryList.value = event.docs
+            .map((e) => ExpendCategory.fromJson(e.data(), e))
+            .toList();
+      }
+      debugPrint("*****ProductCategories: ${productCategoryList.length}");
+    });
+
     ///
     _auth.onAuthChange().listen((_) async {
       if (_ == null) {
@@ -148,8 +161,18 @@ class HomeController extends GetxController {
     }
   }
 
-  //Add Expend Category
+  //Add Product Category
   Future<void> addExpendCategory({required ExpendCategory category}) async {
+    await _database.write(productCategoryCollection, data: category.toJson());
+  }
+
+  //Delete Product Category
+  Future<void> deleteProductCategory({required String pathID}) async {
+    await _database.delete(productCategoryCollection, path: pathID);
+  }
+
+  //Add Expend Category
+  Future<void> addProductCategory({required ExpendCategory category}) async {
     await _database.write(expendCategoryCollection, data: category.toJson());
   }
 

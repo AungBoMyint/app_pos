@@ -7,6 +7,7 @@ import '../controller/home_controller.dart';
 import '../controller/upload_controller.dart';
 import '../data/constant.dart';
 import '../widgets/pos/button/button.dart';
+import '../widgets/radio/stream_radio.dart';
 
 class UploadItem extends StatefulWidget {
   const UploadItem({Key? key}) : super(key: key);
@@ -126,7 +127,7 @@ class _UploadItemState extends State<UploadItem> {
                 ),
               ),
             ),
-            Padding(
+            /*Padding(
               padding: const EdgeInsets.only(
                 top: 20,
                 left: 20,
@@ -140,7 +141,7 @@ class _UploadItemState extends State<UploadItem> {
                   border: OutlineInputBorder(),
                 ),
               ),
-            ),
+            ),*/
             //Below is new code
             //Original Price
             Padding(
@@ -204,6 +205,17 @@ class _UploadItemState extends State<UploadItem> {
                   border: OutlineInputBorder(),
                 ),
               ),
+            ),
+            //Category
+            ExStreamRadio(
+              id: "category_name",
+              label: "Category",
+              valueField: "category_name",
+              labelField: "category_name",
+              categoryList: homecontroller.productCategoryList,
+              keyboardType: TextInputType.text,
+              onChanged: (value) => controller.categoryController.text = value,
+              value: homecontroller.editItem.value?.category ?? "",
             ),
           ],
         ),

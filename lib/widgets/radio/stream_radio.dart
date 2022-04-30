@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pos_and_ecommerce/model/pos/expend_category.dart';
 
 import '../../utils/theme.dart';
 import '../pos/input/input.dart';
@@ -14,15 +15,16 @@ class ExStreamRadio extends StatefulWidget {
   //---
   final String valueField;
   final String labelField;
-  final List<String> categoryList;
+  final List<ExpendCategory> categoryList;
 
-  const ExStreamRadio({Key? key, 
+  const ExStreamRadio({
+    Key? key,
     required this.id,
     required this.label,
     required this.value,
     required this.onChanged,
     required this.keyboardType,
-   this.wrapped = false,
+    this.wrapped = false,
     required this.labelField,
     required this.valueField,
     required this.categoryList,
@@ -43,79 +45,81 @@ class _ExStreamRadioState extends State<ExStreamRadio> {
 
   @override
   Widget build(BuildContext context) {
-    return  widget.categoryList.isNotEmpty ? Container(
-          child: Container(
-            padding: const EdgeInsets.all(10.0),
-            height: 80.0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 4.0,
-                    right: 4.0,
-                    top: 4.0,
-                    bottom: 4.0,
+    return widget.categoryList.isNotEmpty
+        ? Container(
+            child: Container(
+              padding: const EdgeInsets.all(10.0),
+              height: 80.0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 4.0,
+                      right: 4.0,
+                      top: 4.0,
+                      bottom: 4.0,
+                    ),
+                    child: Text(widget.label),
                   ),
-                  child: Text(widget.label),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: widget.categoryList.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      var item = widget.categoryList[index];
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: widget.categoryList.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        var item = widget.categoryList[index];
 
-                      bool selected = selectedValue == item;
+                        bool selected = selectedValue == item.category;
 
-                      return InkWell(
-                        onTap: () {
-                          if (selectedValue ==
-                              item) {
-                            selectedValue = null;
+                        return InkWell(
+                          onTap: () {
+                            if (selectedValue == item) {
+                              selectedValue = null;
+                              setState(() {});
+                              Input.set(widget.id, selectedValue);
+                              if (widget.onChanged != null)
+                                widget.onChanged(selectedValue!);
+                              return;
+                            }
+                            selectedValue = item.category;
                             setState(() {});
+
                             Input.set(widget.id, selectedValue);
                             if (widget.onChanged != null)
                               widget.onChanged(selectedValue!);
-                            return;
-                          }
-                          selectedValue = item;
-                          setState(() {});
-
-                          Input.set(widget.id, selectedValue);
-                          if (widget.onChanged != null)
-                            widget.onChanged(selectedValue!);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.only(
-                            left: 20,
-                            right: 20,
-                          ),
-                          margin: EdgeInsets.only(right: 10.0),
-                          height: theme.mediumHeight,
-                          decoration: BoxDecoration(
-                            borderRadius: theme.largeRadius,
-                            color:
-                                selected ? theme.primary : theme.inactiveColor,
-                          ),
-                          child: Center(
-                              child: Text(
-                            item,
-                            style: TextStyle(
-                              // fontWeight: FontWeight.bold,
-                              color: selected ? Colors.white : theme.textColor,
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(
+                              left: 20,
+                              right: 20,
                             ),
-                          )),
-                        ),
-                      );
-                    },
+                            margin: EdgeInsets.only(right: 10.0),
+                            height: theme.mediumHeight,
+                            decoration: BoxDecoration(
+                              borderRadius: theme.largeRadius,
+                              color: selected
+                                  ? theme.primary
+                                  : theme.inactiveColor,
+                            ),
+                            child: Center(
+                                child: Text(
+                              item.category,
+                              style: TextStyle(
+                                // fontWeight: FontWeight.bold,
+                                color:
+                                    selected ? Colors.white : theme.textColor,
+                              ),
+                            )),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ) : const SizedBox(height: 0,width: 0);
-      
+          )
+        : const SizedBox(height: 0, width: 0);
   }
 }

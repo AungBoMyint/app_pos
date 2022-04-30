@@ -108,9 +108,7 @@ class _ProductViewState extends State<ProductView> {
                       label: "Category",
                       valueField: "category_name",
                       labelField: "category_name",
-                      categoryList: homeController.items
-                          .map((element) => element.category)
-                          .toList(),
+                      categoryList: homeController.productCategoryList.value,
                       onChanged: (value) {
                         controller.categoryNameFilter = value;
                         controller.update();

@@ -79,9 +79,7 @@ class ExpendFormView extends StatelessWidget {
                 valueField: "category_name",
                 labelField: "category_name",
                 value: expend?.category ?? "",
-                categoryList: _homeController.expendCategoryList
-                    .map((element) => element.category)
-                    .toList(),
+                categoryList: _homeController.expendCategoryList,
                 keyboardType: TextInputType.none,
                 onChanged: (value) {},
               );

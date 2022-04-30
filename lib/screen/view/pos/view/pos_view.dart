@@ -63,6 +63,13 @@ class PosView extends StatelessWidget {
                     ),
                     MenuItem(
                       icon: FontAwesomeIcons.boxes,
+                      label: "Product Category",
+                      color: Colors.orange,
+                      onTap: () => Get.toNamed(
+                          productCategoryUrl), // Get.to(ProductCategoryView()),
+                    ),
+                    MenuItem(
+                      icon: FontAwesomeIcons.boxes,
                       label: "Expend Category",
                       color: Colors.orange,
                       onTap: () => Get.toNamed(
