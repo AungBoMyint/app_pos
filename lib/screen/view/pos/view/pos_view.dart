@@ -40,13 +40,13 @@ class PosView extends StatelessWidget {
               title: const Text("CINDY POS"),
             ),
             body: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+              //crossAxisAlignment: CrossAxisAlignment.center,
+              //mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SalesStatistic(),
-                // const SizedBox(
-                //   height: 50.0,
-                // ),
+                const SizedBox(
+                  height: 16.0,
+                ),
                 DashboardMenu(
                   items: [
                     MenuItem(
